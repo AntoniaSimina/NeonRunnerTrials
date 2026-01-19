@@ -1,4 +1,20 @@
-#include "RunnerPlayerController.h"
+﻿#include "RunnerPlayerController.h"
+#include "Blueprint/UserWidget.h"
+
+void ARunnerPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// === HUD ===
+	if (HUDWidgetClass)
+	{
+		HUDWidget = CreateWidget(this, HUDWidgetClass);
+		if (HUDWidget)
+		{
+			HUDWidget->AddToViewport();
+		}
+	}
+}
 
 void ARunnerPlayerController::SetupInputComponent()
 {
@@ -26,16 +42,27 @@ void ARunnerPlayerController::TogglePauseGame()
 		SetInputMode(Mode);
 	}
 }
-void ARunnerPlayerController::BeginPlay()
-{
-	Super::BeginPlay();
 
-	if (HUDWidgetClass)
+void ARunnerPlayerController::ShowEndScreen()
+{
+	UE_LOG(LogTemp, Warning, TEXT("ShowEndScreen CALLED"));
+
+	// 1️⃣ Creează widget-ul o singură dată
+	if (EndScreenClass && !EndScreenWidget)
 	{
-		HUDWidget = CreateWidget(this, HUDWidgetClass);
-		if (HUDWidget)
-		{
-			HUDWidget->AddToViewport();
-		}
+		EndScreenWidget = CreateWidget(this, EndScreenClass);
 	}
+
+	// 2️⃣ Afișează widget-ul
+	if (EndScreenWidget)
+	{
+		EndScreenWidget->AddToViewport(10);
+	}
+
+	// 3️⃣ Oprește jocul
+	SetPause(true);
+
+	// 4️⃣ UI mode + mouse
+	bShowMouseCursor = true;
+	SetInputMode(FInputModeUIOnly());
 }

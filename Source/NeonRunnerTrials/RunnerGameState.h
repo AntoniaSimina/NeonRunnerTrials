@@ -23,20 +23,30 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	// ===== Timer control =====
+	UFUNCTION(BlueprintCallable, Category = "Run")
 	void StartRun();
+
+	UFUNCTION(BlueprintCallable, Category = "Run")
 	void FinishRun();
+
+	UFUNCTION(BlueprintCallable, Category = "Run")
 	void ResetRun();
 
-	float GetRunTime() const { return CurrentRunTime; }
-	ERunState GetRunState() const { return RunState; }
+	// ===== Getters (IMPORTANT pentru Best Time & UI) =====
+	UFUNCTION(BlueprintCallable, Category = "Run")
+	float GetRunTime() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Run")
+	ERunState GetRunState() const;
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
+	// ===== Runtime data =====
 	UPROPERTY(VisibleAnywhere, Category = "Run")
-		float CurrentRunTime = 0.0f;
+	float CurrentRunTime = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, Category = "Run")
-		ERunState RunState = ERunState::Waiting;
+	ERunState RunState = ERunState::Waiting;
 };
